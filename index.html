@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eunoia - Advanced Identity & Career Guidance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+        .cta-button { transition: transform 0.3s, box-shadow 0.3s; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.8s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .quiz-option { transition: background-color 0.2s, border-color 0.2s, transform 0.2s; }
+        .quiz-option:hover { transform: scale(1.05); }
+        .quiz-option.selected { background-color: #4f46e5; border-color: #4f46e5; color: white; }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+        .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #4f46e5; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        .btn-text.hidden { display: none; }
+        .loader.hidden { display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-indigo-600" onclick="EunoiaApp.showPage('home')">Eunoia</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#" class="nav-link active" data-page="home" onclick="EunoiaApp.showPage('home')">Home</a>
+                <a href="#" class="nav-link" data-page="quiz" onclick="EunoiaApp.showPage('quiz')">The Quiz</a>
+                <a href="#" class="nav-link" data-page="sessions" onclick="EunoiaApp.showPage('sessions')">Get a Mentor</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+             <a href="#" class="block py-2" data-page="home" onclick="EunoiaApp.showPage('home')">Home</a>
+             <a href="#" class="block py-2" data-page="quiz" onclick="EunoiaApp.showPage('quiz')">The Quiz</a>
+             <a href="#" class="block py-2" data-page="sessions" onclick="EunoiaApp.showPage('sessions')">Get a Mentor</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="bg-white">
+                <div class="container mx-auto px-6 py-20 text-center">
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">Discover Your Identity, Define Your Future.</h1>
+                    <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Our advanced personality quiz uncovers your core traits to help you make confident career and life decisions.</p>
+                    <button class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full cta-button text-lg" onclick="EunoiaApp.showPage('quiz')">Take the Free Advanced Test</button>
+                </div>
+            </div>
+            <div class="py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl font-bold mb-12">A Modern Approach to Self-Discovery</h2>
+                    <div class="grid md:grid-cols-3 gap-10">
+                        <div class="p-6 bg-white rounded-xl shadow-lg"><h3 class="text-xl font-semibold mb-2">Nuanced Trait Analysis</h3><p class="text-gray-600">Our quiz measures ten distinct personality traits to give you a detailed and accurate profile.</p></div>
+                        <div class="p-6 bg-white rounded-xl shadow-lg"><h3 class="text-xl font-semibold mb-2">Personalized Archetypes</h3><p class="text-gray-600">Discover your unique personality archetype to better understand how your traits combine.</p></div>
+                        <div class="p-6 bg-white rounded-xl shadow-lg"><h3 class="text-xl font-semibold mb-2">Actionable Career Guidance</h3><p class="text-gray-600">Receive tailored advice, career suggestions, and growth plans that align with your specific strengths.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="section py-20">
+            <div class="container mx-auto px-6">
+                <div id="quiz-container" class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-bold text-center mb-2">The Eunoia Discovery Quiz</h2>
+                    <p class="text-center text-gray-600 mb-8">Rate how much you agree with each statement.</p>
+                    <div id="question-container" class="min-h-[250px]"></div>
+                    <div id="validation-message" class="text-center text-red-500 mt-4 h-6"></div>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t">
+                        <button id="prev-btn" class="bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition" onclick="EunoiaApp.prevQuestion()">Previous</button>
+                        <div id="progress-text" class="text-sm text-gray-500 font-semibold"></div>
+                        <button id="next-btn" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg cta-button" onclick="EunoiaApp.nextQuestion()">Next</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section id="results" class="section py-20">
+             <div class="container mx-auto px-6">
+                <div id="results-container" class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-2xl">
+                    <div class="text-center">
+                        <h2 class="text-4xl font-bold text-gray-900 mb-2">Your Personality Archetype</h2>
+                        <h3 id="personality-archetype" class="text-3xl font-semibold text-indigo-600 mb-4"></h3>
+                        <p id="archetype-description" class="text-lg text-gray-600 max-w-2xl mx-auto mb-10"></p>
+                    </div>
+                    <div class="mb-12">
+                         <h4 class="text-2xl font-bold text-center mb-6">Your Core Personality Traits</h4>
+                         <div class="max-w-2xl mx-auto"><canvas id="personality-chart"></canvas></div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-10 mb-10">
+                        <div>
+                            <h4 class="text-2xl font-bold mb-4 border-b-2 border-indigo-200 pb-2">Key Strengths</h4>
+                            <ul id="strengths-list" class="list-disc list-inside space-y-2 text-gray-700"></ul>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-bold mb-4 border-b-2 border-red-200 pb-2">Potential Challenges</h4>
+                            <ul id="weaknesses-list" class="list-disc list-inside space-y-2 text-gray-700"></ul>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-2xl font-bold mb-4">Career & Growth Roadmap</h4>
+                        <p id="career-advice" class="text-gray-700 leading-relaxed"></p>
+                    </div>
+                    <div class="mt-12 p-6 bg-indigo-50 rounded-lg border border-indigo-200 text-center">
+                        <h4 class="text-2xl font-bold text-indigo-800">✨ Get Deeper AI Insights</h4>
+                        <p class="text-gray-600 my-4">Generate a personalized prompt to use with an AI assistant like Gemini for an even deeper analysis.</p>
+                        <button id="generate-prompt-btn" class="bg-indigo-600 text-white font-bold py-3 px-6 rounded-full cta-button">
+                            <span id="generate-prompt-btn-text">Generate & Copy Insight Prompt</span>
+                        </button>
+                    </div>
+                    <div class="text-center mt-12">
+                        <button id="download-pdf-btn" class="bg-green-600 text-white font-bold py-3 px-8 rounded-full cta-button inline-flex items-center gap-2">
+                            <span class="btn-text">Download Results as PDF</span>
+                            <div class="loader hidden"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Sessions Section -->
+        <section id="sessions" class="section">
+            <div class="bg-white">
+                <div class="container mx-auto px-6 py-20 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Turn Insight Into Action with a Mentor</h1>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">Your quiz results are the map. A professional mentor is the guide who helps you navigate from self-discovery to real-world success.</p>
+                </div>
+            </div>
+            <div class="py-20 container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Why Mentorship is a Game-Changer</h2>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div><h3 class="text-xl font-semibold mb-2">Clarify Your Path</h3><p class="text-gray-600">A mentor helps you connect the dots between your personality and tangible career opportunities, providing a clear roadmap.</p></div>
+                    <div><h3 class="text-xl font-semibold mb-2">Gain Insider Knowledge</h3><p class="text-gray-600">Get unfiltered advice from someone who has navigated the industry you're interested in, helping you avoid common pitfalls.</p></div>
+                    <div><h3 class="text-xl font-semibold mb-2">Build Your Network</h3><p class="text-gray-600">A great mentor is your champion. They build your confidence and can introduce you to a network of valuable professional contacts.</p></div>
+                </div>
+            </div>
+            <div class="bg-white py-20">
+                <div class="container mx-a ituto px-6 grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">Ready to Take the Next Step?</h2>
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd6aeTIAKGRd7mgH8oJJ7oSrdSfFZuZOQsJg3krF4KunlL9zg/viewform?embedded=true" width="300" height="1599" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+
+                    </div>
+                    <h2 class="text-3xl font-bold ">What others say</h2>
+                    
+                    <div class="space-y-8">
+                                                
+                        <div><p class="text-gray-700 italic mb-2">"My session was a breakthrough. I went from feeling lost to having three exciting career paths to explore. I can't recommend this enough."</p><p class="font-semibold">— Sarah K., Recent Graduate</p></div>
+                        <div><p class="text-gray-700 italic mb-2">"I had the skills but lacked direction. My mentor helped me understand how my 'Architect' personality was a perfect fit for product management."</p><p class="font-semibold">— David L., Software Developer</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div id="instruction-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full text-center">
+            <h3 class="text-2xl font-bold text-indigo-600 mb-4">Prompt Copied!</h3>
+            <p class="text-gray-700 mb-6">Click below to open Gemini in a new tab, then simply paste (Ctrl+V or Cmd+V) the prompt to get your deep-dive analysis.</p>
+            <button id="close-modal-btn" class="bg-indigo-600 text-white font-bold py-2 px-8 rounded-full cta-button">Open Gemini</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div><h3 class="text-2xl font-bold mb-2">Eunoia</h3><p class="text-gray-400">Your journey to self-discovery starts here.</p><p class="text-gray-500 mt-4 text-sm">&copy; 2025 Eunoia. All Rights Reserved.</p></div>
+                <div><h4 class="text-lg font-semibold mb-4">Quick Links</h4><ul class="space-y-2"><li><a href="#" class="text-gray-400 hover:text-white" onclick="EunoiaApp.showPage('home')">Home</a></li><li><a href="#" class="text-gray-400 hover:text-white" onclick="EunoiaApp.showPage('quiz')">The Quiz</a></li><li><a href="#" class="text-gray-400 hover:text-white" onclick="EunoiaApp.showPage('sessions')">Get a mentor</a></li></ul></div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Join our Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Get insights and updates delivered to your inbox.</p>
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdjByeDzihxHwRYBntEBDxtBR3_zT2jIAWEHPPDjRoVg8qBAg/viewform?embedded=true" width="300" height="200" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+
+                </div>
+            </div>
+             <p class="text-gray-500 mt-4 text-sm">&copy; made with 🤍 by odd solutions 2025.</p>
+       </div>
+        
+    </footer>
+
+    <script>
+    // --- APP INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const EunoiaApp = {
+            currentQuestion: 0, userAnswers: [], currentUserProfile: {}, personalityChart: null,
+            traits: { creative: { name: 'Creative', score: 0 }, inquisitive: { name: 'Inquisitive', score: 0 }, organized: { name: 'Organized', score: 0 }, ambitious: { name: 'Ambitious', score: 0 }, sociable: { name: 'Sociable', score: 0 }, assertive: { name: 'Assertive', score: 0 }, empathetic: { name: 'Empathetic', score: 0 }, collaborative: { name: 'Collaborative', score: 0 }, resilient: { name: 'Resilient', score: 0 }, reflective: { name: 'Reflective', score: 0 } },
+            questions: [ { text: "I enjoy brainstorming new, unconventional ideas.", trait: 'creative', weight: 1 }, { text: "A tidy workspace is essential for my productivity.", trait: 'organized', weight: 1 }, { text: "I feel energized after spending time with a large group of people.", trait: 'sociable', weight: 1 }, { text: "Understanding the 'why' behind a concept is more important than just knowing the facts.", trait: 'inquisitive', weight: 1 }, { text: "I set long-term goals and actively work towards them.", trait: 'ambitious', weight: 1 }, { text: "When a friend is upset, I can easily sense their emotions.", trait: 'empathetic', weight: 1 }, { text: "I am comfortable taking the lead in a group project.", trait: 'assertive', weight: 1 }, { text: "I believe the best results come from teamwork.", trait: 'collaborative', weight: 1 }, { text: "Setbacks don't discourage me for long; I bounce back quickly.", trait: 'resilient', weight: 1 }, { text: "I regularly take time for self-reflection and introspection.", trait: 'reflective', weight: 1 }, { text: "I prefer flexible schedules over strict routines.", trait: 'organized', weight: -1 }, { text: "I am more of a listener than a talker in conversations.", trait: 'sociable', weight: -1 }, { text: "I'm driven by achieving measurable results and recognition.", trait: 'ambitious', weight: 1 }, { text: "I often get lost in thought, exploring abstract theories or ideas.", trait: 'inquisitive', weight: 1 }, { text: "Maintaining harmony in a group is a priority for me, even if it means compromising.", trait: 'collaborative', weight: 1 } ],
+            archetypes: { "The Architect": { traits: ["organized", "ambitious"], description: "A master planner who builds robust systems to achieve clear goals, thriving on creating order from chaos.", strengths: ["Strategic planning", "Goal-oriented execution", "Exceptional organization"], weaknesses: ["Can be rigid or resistant to change", "May overlook the human element", "Prone to over-planning"], advice: "Excel in structured roles like Project Management or Systems Architecture. To grow, practice adapting to unexpected changes and actively seek team feedback." }, "The Visionary": { traits: ["creative", "inquisitive"], description: "An idea factory driven by curiosity, excelling at connecting concepts to create something entirely new.", strengths: ["Innovative thinking", "High creativity", "Natural curiosity"], weaknesses: ["May struggle with practical implementation", "Can lose interest in old ideas", "Dislikes routine tasks"], advice: "Thrive in dynamic roles like R&D or Brand Strategy. Partner with an 'Architect' to bring your brilliant ideas to life." }, "The Connector": { traits: ["sociable", "empathetic"], description: "The heart of the team, with a natural ability to understand, connect with people, and build community.", strengths: ["Strong interpersonal skills", "High empathy", "Building community and culture"], weaknesses: ["Can take on the emotional burden of others", "May avoid conflict to maintain harmony", "Finds impersonal tasks draining"], advice: "Shine in people-centric roles like HR, Community Management, or PR. To grow, practice setting emotional boundaries and using objective data in decisions." }, "The Trailblazer": { traits: ["ambitious", "assertive"], description: "A natural leader driven to make an impact, who is decisive, confident, and thrives on challenges.", strengths: ["Leadership and decisiveness", "Confidence under pressure", "Taking initiative"], weaknesses: ["Can be seen as too dominant", "May overlook details in a rush to act", "Can be overly competitive"], advice: "Built for leadership. Pursue roles like Team Lead or Startup Founder. Your growth involves practicing active listening to empower your team." }, "The Sage": { traits: ["reflective", "inquisitive"], description: "A deep thinker driven by a quest for knowledge, preferring to analyze before speaking to offer profound insights.", strengths: ["Deep analytical skills", "Thoughtful and strategic insights", "Calm and measured demeanor"], weaknesses: ["Can suffer from 'analysis paralysis'", "May be hesitant to share insights", "Prefers working alone"], advice: "Excel in roles requiring deep expertise like a Researcher or Data Scientist. Challenge yourself to share insights more readily and collaborate with action-oriented colleagues." } },
+
+            init() { this.userAnswers = new Array(this.questions.length).fill(null); this.setupEventListeners(); this.showPage('home'); this.renderQuestion(); },
+            setupEventListeners() {
+                const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
+                navLinks.forEach(link => link.addEventListener('click', e => { e.preventDefault(); this.showPage(link.dataset.page); }));
+                document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+                document.getElementById('generate-prompt-btn').addEventListener('click', () => this.generateAndCopyPrompt());
+                document.getElementById('close-modal-btn').addEventListener('click', () => { window.open('https://gemini.google.com', '_blank'); document.getElementById('instruction-modal').classList.add('hidden'); });
+                document.getElementById('download-pdf-btn').addEventListener('click', e => this.downloadPdf(e.currentTarget));
+            },
+            showPage(pageId) {
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === pageId));
+                window.scrollTo(0, 0);
+            },
+            renderQuestion() {
+                const q = this.questions[this.currentQuestion], answer = this.userAnswers[this.currentQuestion], options = [{ t: 'Strongly Disagree', v: -2 }, { t: 'Disagree', v: -1 }, { t: 'Neutral', v: 0 }, { t: 'Agree', v: 1 }, { t: 'Strongly Agree', v: 2 }];
+                let html = `<h3 class="text-xl font-semibold mb-6 text-center">${q.text}</h3><div class="flex flex-wrap justify-center gap-2 md:gap-4">`;
+                options.forEach(opt => { html += `<button class="quiz-option border-2 rounded-full px-4 py-2 text-sm md:text-base ${answer === opt.v ? 'selected' : 'border-gray-300'}" onclick="EunoiaApp.selectAnswer(${opt.v})">${opt.t}</button>`; });
+                document.getElementById('question-container').innerHTML = html + `</div>`;
+                document.getElementById('prev-btn').style.visibility = this.currentQuestion === 0 ? 'hidden' : 'visible';
+                document.getElementById('next-btn').textContent = this.currentQuestion === this.questions.length - 1 ? 'See Results' : 'Next';
+                document.getElementById('progress-text').textContent = `Question ${this.currentQuestion + 1} of ${this.questions.length}`;
+            },
+            selectAnswer(value) { this.userAnswers[this.currentQuestion] = value; document.getElementById('validation-message').textContent = ''; this.renderQuestion(); },
+            nextQuestion() {
+                if (this.userAnswers[this.currentQuestion] === null) {
+                    const msg = document.getElementById('validation-message'); msg.textContent = 'Please select an answer.';
+                    document.getElementById('quiz-container').classList.add('shake');
+                    setTimeout(() => document.getElementById('quiz-container').classList.remove('shake'), 500);
+                    return;
+                }
+                this.currentQuestion < this.questions.length - 1 ? (this.currentQuestion++, this.renderQuestion()) : this.calculateResults();
+            },
+            prevQuestion() { if (this.currentQuestion > 0) { this.currentQuestion--; this.renderQuestion(); } },
+            calculateResults() {
+                Object.values(this.traits).forEach(t => t.score = 0);
+                this.userAnswers.forEach((ans, i) => { if (ans !== null) this.traits[this.questions[i].trait].score += ans * this.questions[i].weight; });
+                const scores = {}, maxScore = 10;
+                Object.keys(this.traits).forEach(k => scores[k] = Math.max(0, Math.round((this.traits[k].score / maxScore) * 100)));
+                const sorted = Object.keys(this.traits).sort((a, b) => this.traits[b].score - this.traits[a].score);
+                let archetype = "The Unique Individual";
+                for (const key in this.archetypes) {
+                    const archTraits = this.archetypes[key].traits;
+                    if ((archTraits.includes(sorted[0]) && archTraits.includes(sorted[1]))) { archetype = key; break; }
+                }
+                this.displayResults(archetype, scores, sorted);
+            },
+            displayResults(key, scores, sortedKeys) {
+                const profile = this.archetypes[key] || { description: "Your unique blend of traits makes you one of a kind, combining strengths from different areas to create a style that is uniquely yours.", strengths: sortedKeys.slice(0, 4).map(t => this.traits[t].name), weaknesses: ["May find it hard to fit into conventional roles", "Can have conflicting internal motivations"], advice: "Embrace your unique combination of skills. Look for interdisciplinary roles or create your own path. Your strength lies in your versatility." };
+                this.currentUserProfile = { archetype: key, ...profile };
+                document.getElementById('personality-archetype').textContent = key; document.getElementById('archetype-description').textContent = profile.description;
+                document.getElementById('strengths-list').innerHTML = profile.strengths.map(s => `<li>${s}</li>`).join('');
+                document.getElementById('weaknesses-list').innerHTML = profile.weaknesses.map(w => `<li>${w}</li>`).join('');
+                document.getElementById('career-advice').innerHTML = profile.advice.replace(/\. /g, '.<br><br>');
+                const ctx = document.getElementById('personality-chart').getContext('2d');
+                if (this.personalityChart) this.personalityChart.destroy();
+                this.personalityChart = new Chart(ctx, { type: 'radar', data: { labels: Object.values(this.traits).map(t => t.name), datasets: [{ label: 'Trait Scores', data: Object.values(scores), backgroundColor: 'rgba(79, 70, 229, 0.2)', borderColor: '#4f46e5', borderWidth: 2 }] }, options: { scales: { r: { suggestedMin: 0, suggestedMax: 100 } }, plugins: { legend: { display: false } } } });
+                this.showPage('results');
+            },
+            generateAndCopyPrompt() {
+                if (!this.currentUserProfile.archetype) return; const { archetype, strengths, weaknesses } = this.currentUserProfile;
+                const prompt = `Act as an expert career and personal development coach. Analyze my personality profile:\n\n- Archetype: "${archetype}"\n- Strengths: ${strengths.join(', ')}\n- Challenges: ${weaknesses.join(', ')}\n\nPlease provide:\n1. **Deep-Dive Career Analysis:** Suggest 3 specific job roles that are an excellent fit. For each, explain *why* it aligns with my profile.\n2. **Actionable Growth Plan:** Give two concrete steps to develop my 'Challenges' into strengths.\n3. **Ideal Collaboration Style:** Describe the team environment where I would thrive most.\n\nFormat the response clearly with headings.`;
+                navigator.clipboard.writeText(prompt).then(() => {
+                    const btnTxt = document.getElementById('generate-prompt-btn-text'); btnTxt.textContent = 'Copied!'; setTimeout(() => { btnTxt.textContent = 'Generate & Copy Insight Prompt'; }, 2000);
+                    document.getElementById('instruction-modal').classList.remove('hidden');
+                }).catch(err => console.error('Failed to copy text: ', err));
+            },
+            downloadPdf(button) {
+                const btnText = button.querySelector('.btn-text'), loader = button.querySelector('.loader');
+                btnText.classList.add('hidden'); loader.classList.remove('hidden'); button.disabled = true;
+                html2canvas(document.getElementById('results-container'), { scale: 2 }).then(canvas => {
+                    const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4'); const pdfWidth = pdf.internal.pageSize.getWidth();
+                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pdfWidth, (canvas.height * pdfWidth) / canvas.width);
+                    pdf.save("Eunoia-Results.pdf");
+                }).finally(() => { btnText.classList.remove('hidden'); loader.classList.add('hidden'); button.disabled = false; });
+            }
+        };
+        window.EunoiaApp = EunoiaApp; EunoiaApp.init();
+    });
+    </script>
+</body>
+</html>
+
